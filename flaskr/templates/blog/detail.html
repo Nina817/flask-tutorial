@@ -2,9 +2,6 @@
 
 {% block header %}
   <h1>{% block title %}Post Detail View{% endblock %}</h1>
-  {% if g.user %}
-    <a class="action" href="{{ url_for('blog.create') }}">New</a>
-  {% endif %}
 {% endblock %}
 
 {% block content %}
@@ -18,8 +15,14 @@
         {% if g.user['id'] == post['author_id'] %}
         <a class="action" href="{{ url_for('blog.update', id=post['id']) }}">Edit</a>
         {% endif %}
+        {% if g.user and not like %}
+        <a class="action" href="{{ url_for('blog.like', id =post['id']) }}">Like</a>
+        {% elif g.user and like %}
+        <a class="action" href="{{ url_for('blog.unlike', id =post['id']) }}">Unlike</a>
+        {% endif %}
     </header>
     <p class="body">{{ post['body'] }}</p>
+    <p>{{like_count}} like(s)</p>
     </article>
     <hr>
 {% endblock %}
