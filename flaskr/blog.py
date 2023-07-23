@@ -69,7 +69,7 @@ def update(id):
         error = None
 
         if not title:
-            error = 'Title is required'
+            error = 'Title is required.'
         
         if error is not None:
             flash(error)
@@ -92,3 +92,8 @@ def delete(id):
     db.execute('DELETE FROM post WHERE id = ?', (id,))
     db.commit()
     return redirect(url_for('blog.index'))
+
+@bp.route('/<int:id>/')
+def detail(id):
+    post = get_post(id, check_author=False)
+    return render_template('blog/detail.html', post=post)
