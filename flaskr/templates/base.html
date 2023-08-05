@@ -1,8 +1,15 @@
 <!doctype html>
 <title>{% block title %}{% endblock %} - Flaskr</title>
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-<nav>
+<nav class="base-nav">
   <h1><a href="{{ url_for('blog.index') }}">Flaskr</a></h1>
+  {% if request.path == url_for('index') %}
+  <form method="post">
+    <input type="text" name="search" placeholder="search by tag" value="{{ request.form['search'] }}">
+    <button type="submit" name="action">Submit
+    </button>
+  </form>
+  {% endif %}
   <ul>
     {% if g.user %}
       <li><span>{{ g.user['username'] }}</span>

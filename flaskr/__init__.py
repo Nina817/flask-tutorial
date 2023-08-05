@@ -33,3 +33,4 @@ def create_app(test_config=None):
     app.add_url_rule('/', endpoint='index') #associates name 'index' with / url, so url_for('index') or url_for('blog.index') will both work
 
     return app
+

@@ -3,14 +3,17 @@
 {% block header %}
   <h1>{% block title %}Posts{% endblock %}</h1>
   {% if g.user %}
-    <a class="action" href="{{ url_for('blog.create') }}">New</a>
+    <a class="action new-blog" href="{{ url_for('blog.create') }}">New</a>
   {% endif %}
 {% endblock %}
 
 {% block content %}
+{{ pagination.info }}
+{{ pagination.links }}
   {% for post in posts %}
     <article class="post">
       <header>
+        <div>{{ loop.index + pagination.skip }}</div>
         <div>
           <a class="action" href="{{ url_for('blog.detail', id=post['id']) }}"><h1>{{ post['title'] }}</h1></a>
           <div class="about">by {{ post['username'] }} on {{ post['created'].strftime('%Y-%m-%d') }}</div>
@@ -18,12 +21,19 @@
         {% if g.user['id'] == post['author_id'] %}
           <a class="action" href="{{ url_for('blog.update', id=post['id']) }}">Edit</a>
         {% endif %}
+        {% if post['tag_titles'] %}
+        {% set tags = post['tag_titles'].split(',') %}
+        {% for tag in tags %}
+            <p style="display:inline;border: 2px solid #377ba8;border-radius: 5px;background-color: lightgray;">{{ tag }}</p>
+        {% endfor %} 
+        {% endif %}
       </header>
       <p class="body">{{ post['body'] }}</p>
-      <p>{{post['count(pl.id)']}} like(s)</p>
+      <p>{{post['like_count']}} like(s)</p>
     </article>
     {% if not loop.last %}
       <hr>
     {% endif %}
   {% endfor %}
+{{ pagination.links }}
 {% endblock %}

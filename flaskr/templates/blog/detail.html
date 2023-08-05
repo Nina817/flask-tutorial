@@ -14,15 +14,45 @@
         </div>
         {% if g.user['id'] == post['author_id'] %}
         <a class="action" href="{{ url_for('blog.update', id=post['id']) }}">Edit</a>
+        <a class="action" href="{{ url_for('blog.create_tag', id=post['id']) }}">New Tag</a>
         {% endif %}
         {% if g.user and not like %}
         <a class="action" href="{{ url_for('blog.like', id =post['id']) }}">Like</a>
         {% elif g.user and like %}
         <a class="action" href="{{ url_for('blog.unlike', id =post['id']) }}">Unlike</a>
         {% endif %}
+        {% if g.user %}
+        <a class="action" href="{{ url_for('blog.create_comment', id =post['id']) }}">Comment</a>
+        {% endif %}
     </header>
+    {% if post_image %}
+    <img style="width:150px;height:150px"src="{{ url_for('static', filename=post_image) }}" alt="Post Image">
+    {% endif %}
     <p class="body">{{ post['body'] }}</p>
     <p>{{like_count}} like(s)</p>
+    {% for tag in tags %}
+    {% if g.user['id'] == post['author_id'] %}
+    <a class="action" href="{{ url_for('blog.update_tag', id=tag['id']) }}"><p style="display:inline;border: 2px solid #377ba8;border-radius: 5px;background-color: lightgray;">{{tag['title']}}</p></a>
+    {% else %}
+    <p style="display:inline;border: 2px solid #377ba8;border-radius: 5px;background-color: lightgray;">{{tag['title']}}</p>
+    {% endif %}
+    {% endfor %}
     </article>
     <hr>
+    <h3><u>Comments</u></h3>
+    {% for comment in comments %}
+      <p><strong>{{ comment['username']}}</strong></p>
+      <p><i>{{ comment['body'] }}</i></p>
+      {% if g.user %}
+        {% if comment.user_id == g.user['id']%}
+        <a class='action' href="{{ url_for('blog.delete_comment', id=comment['id']) }}">Delete comment</a>
+        {% endif %}
+      {% endif %}
+      <hr>
+    {% endfor %}
+    <h3>Upload new File</h3>
+    <form method=post enctype=multipart/form-data>
+      <input type=file name=file>
+      <input type=submit value=Upload>
+    </form>
 {% endblock %}

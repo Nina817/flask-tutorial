@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}New Tag{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+  <form method="post">
+    <label for="new_tag">New Tag</label>
+    <input name="new_tag" id="new_tag" value="{{ request.form['new_tag'] }}">
+    <label name='tag' for="select">Or select another tag</label>
+    <select name='tag' id="tag">
+      <option value = 'none'> SELECT</option>
+      {% for tag in tags %}
+      <option value= "{{ tag[0] }}" >"{{ tag["title"]}}"</option>
+      {% endfor %}
+    </select>
+    <input type="submit" value="Save">
+  </form>
+{% endblock %}

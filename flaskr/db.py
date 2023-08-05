@@ -31,3 +31,4 @@ def init_db_command():
 def init_app(app): #registering close_db and init_db_command functions
     app.teardown_appcontext(close_db)
     app.cli.add_command(init_db_command)
+
